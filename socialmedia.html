@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sosyal Medya Prototipi</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 10px;
+      background-color: #4267B2;
+      color: white;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .profile img {
+      width: 20%;  
+      border-radius: 50%;
+    }
+
+    .post-box {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .post-box textarea {
+      width: 100%;
+      height: 60px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      resize: none;
+    }
+
+    .post-box button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #4267B2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .feed .post {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .post-header img {
+      border-radius: 50%;
+    }
+
+    .actions {
+      margin-top: 10px;
+      color: #555;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .actions span {
+      margin-right: 15px;
+      user-select: none;
+    }
+
+    .comments {
+      margin-top: 10px;
+    }
+
+    .comments input {
+      width: 100%;
+      margin-top: 5px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .comment-list {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sosyal Medya</h1>
+  </header>
+
+  <section class="profile">
+    <img src="https://avatars.githubusercontent.com/u/48688437?v=4" alt="Profil Foto" />
+    <div>
+      <h2>Hasan Soruk</h2>
+      <p>@hasansrk</p>
+    </div>
+  </section>
+
+  <section class="post-box">
+    <textarea id="postText" placeholder="Ne düşünüyorsun?"></textarea>
+    <button onclick="paylas()">Paylaş</button>
+  </section>
+
+  <section class="feed" id="feed">
+    <!-- Gönderiler buraya dinamik olarak eklenecek -->
+  </section>
+
+  <script>
+    function paylas() {
+      const textarea = document.getElementById("postText");
+      const icerik = textarea.value.trim();
+
+      if (icerik === "") {
+        alert("Boş gönderi paylaşılamaz!");
+        return;
+      }
+
+      const feed = document.getElementById("feed");
+
+      const yeniGonderi = document.createElement("div");
+      yeniGonderi.classList.add("post");
+
+      // Gönderi içeriği
+      yeniGonderi.innerHTML = `
+        <div class="https://avatars.githubusercontent.com/u/48688437?v=4" />
+          <div>
+            <h3>Hasan Soruk</h3>
+            <p>@hasansrk</p>
+          </div>
+        </div>
+        <p class="post-content">${icerik}</p>
+        <div class="actions">
+          <span onclick="begen(this)">❤️ Beğen (<span class="like-count">0</span>)</span>
+          <span onclick="yorumEkle(this)">💬 Yorum Yap</span>
+        </div>
+        <div class="comments" style="display: none;">
+          <input type="text" placeholder="Yorumunuzu yazın..." onkeypress="gonderYorum(event, this)" />
+          <div class="comment-list"></div>
+        </div>
+      `;
+
+      feed.prepend(yeniGonderi);
+      textarea.value = "";
+    }
+
+    function begen(span) {
+      const countSpan = span.querySelector(".like-count");
+      let count = parseInt(countSpan.textContent);
+      count++;
+      countSpan.textContent = count;
+    }
+
+    function yorumEkle(span) {
+      const post = span.closest(".post");
+      const yorumBolumu = post.querySelector(".comments");
+      yorumBolumu.style.display = yorumBolumu.style.display === "none" ? "block" : "none";
+    }
+
+    function gonderYorum(e, input) {
+      if (e.key === "Enter") {
+        const yorum = input.value.trim();
+        if (yorum !== "") {
+          const yorumList = input.parentElement.querySelector(".comment-list");
+          const p = document.createElement("p");
+          p.textContent = "Sen: " + yorum;
+          yorumList.appendChild(p);
+          input.value = "";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
